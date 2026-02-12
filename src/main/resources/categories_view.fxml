@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.medialab.CategoriesController">
+    <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
+
+    <Label text="Διαχείριση Κατηγοριών" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+    <TableView fx:id="table" prefHeight="300.0">
+        <columns>
+            <TableColumn fx:id="nameCol" text="Όνομα Κατηγορίας" prefWidth="300.0" />
+        </columns>
+    </TableView>
+
+    <HBox spacing="10.0">
+        <TextField fx:id="nameField" promptText="Όνομα Κατηγορίας" HBox.hgrow="ALWAYS"/>
+        <Button text="Προσθήκη" onAction="#onAdd" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+        <Button text="Μετονομασία" onAction="#onEdit"/>
+        <Button text="Διαγραφή" onAction="#onDelete" style="-fx-background-color: #F44336; -fx-text-fill: white;"/>
+    </HBox>
+</VBox>

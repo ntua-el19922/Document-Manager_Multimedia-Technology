@@ -14,6 +14,9 @@ public class DataManager {
     private static final String FOLDER_PATH = "medialab";
     private static final String USERS_FILE = "medialab/users.json";
 
+    private static final String CATEGORIES_FILE = "medialab/categories.json";
+    private static java.util.List<com.medialab.model.Category> categories = new java.util.ArrayList<>();
+
     // Η μνήμη της εφαρμογής (Στατική λίστα)
     private static List<User> users = new ArrayList<>();
     private static ObjectMapper mapper = new ObjectMapper();
@@ -39,6 +42,16 @@ public class DataManager {
                 users.add(new User("medialab", "medialab_2025", "Default Admin", "admin"));
                 saveAllData(); // Τον σώζουμε αμέσως
             }
+
+            // --- Φόρτωση Κατηγοριών ---
+            File catFile = new File(CATEGORIES_FILE);
+            if (catFile.exists() && catFile.length() > 0) {
+                categories = mapper.readValue(catFile, new TypeReference<java.util.List<com.medialab.model.Category>>() {});
+                System.out.println("✅ Φορτώθηκαν " + categories.size() + " κατηγορίες.");
+            } else {
+                categories = new java.util.ArrayList<>();
+                System.out.println("⚠️ Δεν βρέθηκαν κατηγορίες.");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -54,6 +67,11 @@ public class DataManager {
             } else {
                 System.err.println("❌ ΠΡΟΣΟΧΗ: Η λίστα χρηστών είναι κενή. Ακύρωση εγγραφής.");
             }
+
+            // --- Αποθήκευση Κατηγοριών ---
+            if (categories != null) {
+                mapper.writerWithDefaultPrettyPrinter().writeValue(new File(CATEGORIES_FILE), categories);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,5 +79,9 @@ public class DataManager {
 
     public static List<User> getUsers() {
         return users;
+    }
+
+    public static java.util.List<com.medialab.model.Category> getCategories() {
+        return categories;
     }
 }
