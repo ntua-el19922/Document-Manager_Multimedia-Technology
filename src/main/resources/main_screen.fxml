@@ -22,7 +22,7 @@
 
                 <Menu fx:id="adminMenu" mnemonicParsing="false" text="Διαχείριση">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Χρήστες" />
+                        <MenuItem mnemonicParsing="false" text="Χρήστες" onAction="#onUsersMenuClick" />
                         <MenuItem mnemonicParsing="false" text="Κατηγορίες" />
                     </items>
                 </Menu>

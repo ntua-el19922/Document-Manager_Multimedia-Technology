@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu; // Import για το Menu
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -31,6 +32,23 @@ public class MainController {
         // Έλεγχος δικαιωμάτων: Αν ΔΕΝ είναι admin, κρύψε το μενού διαχείρισης [cite: 29]
         if (!"admin".equals(user.getType())) {
             adminMenu.setVisible(false);
+        }
+    }
+
+    @FXML private StackPane contentArea;
+
+    @FXML
+    public void onUsersMenuClick(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/users_view.fxml"));
+            Node view = loader.load();
+
+            // Καθαρίζουμε το κέντρο και βάζουμε το νέο view
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(view);
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
