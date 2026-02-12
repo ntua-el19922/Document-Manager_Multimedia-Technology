@@ -1,34 +1,50 @@
 package com.medialab;
 
 import com.medialab.model.User;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.event.ActionEvent;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu; // Import για το Menu
+import javafx.stage.Stage;
+
 import java.io.IOException;
 
 public class MainController {
 
     @FXML
-    private Label welcomeLabel;
+    private Label userInfoLabel; // Άλλαξε όνομα στο FXML
+
+    @FXML
+    private Menu adminMenu; // Το μενού διαχείρισης
 
     private User currentUser;
 
-    // Αυτή η μέθοδος θα καλείται από τον LoginController για να ξέρουμε ποιος μπήκε
     public void setLoggedInUser(User user) {
         this.currentUser = user;
-        welcomeLabel.setText("Καλώς ήρθες, " + user.getFullName() + " (" + user.getType() + ")");
+
+        // Ενημέρωση πληροφοριών αριστερά
+        userInfoLabel.setText("Χρήστης:\n" + user.getUsername() + "\n(" + user.getType() + ")");
+
+        // Έλεγχος δικαιωμάτων: Αν ΔΕΝ είναι admin, κρύψε το μενού διαχείρισης [cite: 29]
+        if (!"admin".equals(user.getType())) {
+            adminMenu.setVisible(false);
+        }
     }
 
     @FXML
     public void onLogoutClick(ActionEvent event) throws IOException {
-        // Επιστροφή στο Login
+        // Η λογική αποσύνδεσης παραμένει ίδια
+        // (Προσοχή: εδώ το event έρχεται από MenuItem, ίσως χρειαστεί αλλαγή στον τρόπο εύρεσης του Stage)
+
+        // Ασφαλής τρόπος για να βρούμε το παράθυρο από MenuItem
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        // Χρησιμοποιούμε το adminMenu (ή οποιοδήποτε Node της σκηνής) για να βρούμε το Stage
+        Stage stage = (Stage) userInfoLabel.getScene().getWindow();
         stage.setScene(new Scene(loader.load()));
         stage.setTitle("MediaLab Documents Login");
+        stage.centerOnScreen();
     }
 }
