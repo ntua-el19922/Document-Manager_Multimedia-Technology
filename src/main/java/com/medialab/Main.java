@@ -3,6 +3,7 @@ package com.medialab; // Προσοχή στο package!
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 
@@ -16,11 +17,12 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage stage) {
-        // Ένα απλό παράθυρο για να δούμε ότι δουλεύει
-        Label label = new Label("Καλώς ήρθατε!\nΧρήστες στη μνήμη: " + DataManager.getUsers().size());
-        StackPane root = new StackPane(label);
-        Scene scene = new Scene(root, 400, 300);
+    public void start(Stage stage) throws Exception {
+        // Φόρτωση του FXML αρχείου από τα resources
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/login.fxml"));
+
+        // Δημιουργία της σκηνής
+        Scene scene = new Scene(fxmlLoader.load(), 400, 300);
 
         stage.setTitle("MediaLab Documents");
         stage.setScene(scene);
