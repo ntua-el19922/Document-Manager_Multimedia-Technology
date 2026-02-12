@@ -36,7 +36,8 @@
                 <Label style="-fx-font-weight: bold; -fx-underline: true;" text="Πληροφορίες Συστήματος" />
                 <Label fx:id="userInfoLabel" text="Χρήστης: ..." wrapText="true" />
                 <Label text="-----------------" />
-                <Label text="Συνολικά Έγγραφα: 0" /> <Label text="Κατηγορίες: 0" />
+                <Label fx:id="totalDocsLabel" text="Συνολικά Έγγραφα: 0" />
+                <Label fx:id="totalCatsLabel" text="Κατηγορίες: 0" />
             </children>
             <padding>
                 <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />

@@ -17,6 +17,8 @@ public class DataManager {
     private static final String CATEGORIES_FILE = "medialab/categories.json";
     private static java.util.List<com.medialab.model.Category> categories = new java.util.ArrayList<>();
 
+    private static final String DOCUMENTS_FILE = "medialab/documents.json";
+    private static java.util.List<com.medialab.model.Document> documents = new java.util.ArrayList<>();
     // Η μνήμη της εφαρμογής (Στατική λίστα)
     private static List<User> users = new ArrayList<>();
     private static ObjectMapper mapper = new ObjectMapper();
@@ -52,6 +54,16 @@ public class DataManager {
                 categories = new java.util.ArrayList<>();
                 System.out.println("⚠️ Δεν βρέθηκαν κατηγορίες.");
             }
+
+            // --- Φόρτωση Εγγράφων ---
+            File docFile = new File(DOCUMENTS_FILE);
+            if (docFile.exists() && docFile.length() > 0) {
+                documents = mapper.readValue(docFile, new TypeReference<java.util.List<com.medialab.model.Document>>() {});
+                System.out.println("✅ Φορτώθηκαν " + documents.size() + " έγγραφα.");
+            } else {
+                documents = new java.util.ArrayList<>();
+                System.out.println("⚠️ Δεν βρέθηκαν έγγραφα.");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -72,6 +84,10 @@ public class DataManager {
             if (categories != null) {
                 mapper.writerWithDefaultPrettyPrinter().writeValue(new File(CATEGORIES_FILE), categories);
             }
+            // --- Αποθήκευση Εγγράφων ---
+            if (documents != null) {
+                mapper.writerWithDefaultPrettyPrinter().writeValue(new File(DOCUMENTS_FILE), documents);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -83,5 +99,9 @@ public class DataManager {
 
     public static java.util.List<com.medialab.model.Category> getCategories() {
         return categories;
+    }
+
+    public static java.util.List<com.medialab.model.Document> getDocuments() {
+        return documents;
     }
 }

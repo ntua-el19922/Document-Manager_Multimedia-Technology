@@ -23,6 +23,10 @@ public class MainController {
 
     private User currentUser;
 
+    @FXML private Label statsLabel;
+    @FXML private Label totalDocsLabel;
+    @FXML private Label totalCatsLabel;
+
     public void setLoggedInUser(User user) {
         this.currentUser = user;
 
@@ -33,6 +37,9 @@ public class MainController {
         if (!"admin".equals(user.getType())) {
             adminMenu.setVisible(false);
         }
+
+        totalDocsLabel.setText("Συνολικά Έγγραφα: " + DataManager.getDocuments().size());
+        totalCatsLabel.setText("Κατηγορίες: " + DataManager.getCategories().size());
     }
 
     @FXML private StackPane contentArea;
