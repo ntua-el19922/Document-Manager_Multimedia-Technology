@@ -71,6 +71,17 @@ public class MainController {
     }
 
     @FXML
+    public void onDocsMenuClick(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/documents_view.fxml"));
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     public void onLogoutClick(ActionEvent event) throws IOException {
         // Η λογική αποσύνδεσης παραμένει ίδια
         // (Προσοχή: εδώ το event έρχεται από MenuItem, ίσως χρειαστεί αλλαγή στον τρόπο εύρεσης του Stage)

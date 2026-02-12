@@ -16,6 +16,7 @@
             <menus>
                 <Menu mnemonicParsing="false" text="Εφαρμογή">
                     <items>
+                        <MenuItem mnemonicParsing="false" text="Λίστα Εγγράφων" onAction="#onDocsMenuClick"/>
                         <MenuItem mnemonicParsing="false" onAction="#onLogoutClick" text="Αποσύνδεση" />
                     </items>
                 </Menu>
