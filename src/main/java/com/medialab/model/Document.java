@@ -41,6 +41,10 @@ public class Document implements Serializable {
 
         // 3. Αυξάνουμε την έκδοση
         this.version++;
+
+        // 4. ΕΝΗΜΕΡΩΣΗ ΗΜΕΡΟΜΗΝΙΑΣ
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        this.creationDate = dtf.format(LocalDateTime.now());
     }
 
     // Getters & Setters

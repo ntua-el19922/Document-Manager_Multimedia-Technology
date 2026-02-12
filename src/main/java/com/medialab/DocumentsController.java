@@ -31,6 +31,11 @@ public class DocumentsController {
     }
 
     @FXML
+    public void onNewDocument() {
+        openEditor(null); // null σημαίνει ΝΕΟ έγγραφο
+    }
+
+    @FXML
     public void onOpenDocument() {
         Document selected = docsTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
@@ -38,19 +43,8 @@ public class DocumentsController {
             alert.show();
             return;
         }
-
-        System.out.println("Άνοιγμα εγγράφου: " + selected.getTitle());
-        // ΕΔΩ θα βάλουμε αργότερα τον κώδικα που ανοίγει τον Editor
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Προσεχώς: Editor για το " + selected.getTitle());
-        alert.show();
+        openEditor(selected); // Περνάμε το επιλεγμένο για επεξεργασία
     }
-
-    @FXML
-    public void onNewDocument() {
-        openEditor(null); // null σημαίνει ΝΕΟ έγγραφο
-    }
-
-
 
     private void openEditor(Document doc) {
         try {
@@ -60,11 +54,9 @@ public class DocumentsController {
             // Περνάμε τα δεδομένα στον EditorController
             EditorController editorParams = loader.getController();
 
-            // ΠΡΟΣΟΧΗ: Εδώ "κλέβουμε" λίγο και βρίσκουμε τον χρήστη.
-            // Κανονικά θα έπρεπε να μεταφέρεται από Controller σε Controller.
-            // Ας βρούμε τον τρέχοντα χρήστη από τη λίστα (ο admin είναι πάντα ο πρώτος ή ο logged in).
-            // Για τώρα, ας βάλουμε τον πρώτο χρήστη της λίστας ως "Current User" για να μην κολλήσουμε.
-            User activeUser = DataManager.getUsers().get(0);
+            // Βρίσκουμε τον τρέχοντα χρήστη (προσωρινά παίρνουμε τον πρώτο από τη λίστα ή τον admin)
+            // Σημείωση: Αν η λίστα είναι άδεια (απίθανο αφού είσαι μέσα), αυτό ίσως θέλει προσοχή.
+            User activeUser = DataManager.getUsers().isEmpty() ? null : DataManager.getUsers().get(0);
 
             editorParams.setContext(activeUser, doc);
 
@@ -82,7 +74,6 @@ public class DocumentsController {
             e.printStackTrace();
         }
     }
-
 
     private void refreshTable() {
         ObservableList<Document> data = FXCollections.observableArrayList(DataManager.getDocuments());

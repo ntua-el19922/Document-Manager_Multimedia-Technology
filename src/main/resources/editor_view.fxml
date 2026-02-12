@@ -27,5 +27,6 @@
     <HBox alignment="CENTER_RIGHT" spacing="15.0">
         <Button onAction="#onCancel" text="Ακύρωση" />
         <Button onAction="#onSave" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Αποθήκευση" />
+        <Button text="Ιστορικό" onAction="#onHistory" />
     </HBox>
 </VBox>

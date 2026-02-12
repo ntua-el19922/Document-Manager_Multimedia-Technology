@@ -83,6 +83,31 @@ public class EditorController {
     }
 
     @FXML
+    public void onHistory() {
+        if (currentDocument == null || currentDocument.getPreviousVersions().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Δεν υπάρχει ιστορικό για αυτό το έγγραφο.");
+            alert.show();
+            return;
+        }
+
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/history_view.fxml"));
+            javafx.scene.Parent root = loader.load();
+
+            HistoryController controller = loader.getController();
+            controller.setDocument(currentDocument);
+
+            Stage stage = new Stage();
+            stage.setTitle("Ιστορικό Αλλαγών");
+            stage.setScene(new javafx.scene.Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     public void onCancel() {
         ((Stage) titleField.getScene().getWindow()).close();
     }
