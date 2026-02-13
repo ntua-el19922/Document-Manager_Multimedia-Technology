@@ -4,7 +4,7 @@ Document Manager - Multimedia Technology
 
 Οδηγίες Εκτέλεσης
 1. Ανοίξτε το project στο IntelliJ.
-2. Τρέξτε την κλάση 'com.medialab.Launcher'.
+2. Τρέξτε την κλάση 'src.main.java.Launcher'.
 
 Στοιχεία Εισόδου (Default Admin)
 * Username : medialab
