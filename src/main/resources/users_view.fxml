@@ -34,6 +34,7 @@
                 <PasswordField fx:id="passwordField" promptText="Password" />
                 <TextField fx:id="fullnameField" promptText="Ονοματεπώνυμο" HBox.hgrow="ALWAYS" />
                 <ComboBox fx:id="typeCombo" prefWidth="100.0" promptText="Role" />
+                <TextField fx:id="categoriesField" promptText="Κατηγορίες" />
             </children>
         </HBox>
 

@@ -1,6 +1,10 @@
 package com.medialab.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class User implements Serializable {
     private String username;
@@ -8,7 +12,12 @@ public class User implements Serializable {
     private String fullName;
     private String type; // "admin", "author", "user"
 
-    // Κενός constructor (ΑΠΑΡΑΙΤΗΤΟΣ για το JSON/Jackson)
+    // ΝΕΟ: Λίστα με ονόματα κατηγοριών που έχει πρόσβαση
+    private List<String> allowedCategories = new ArrayList<>();
+
+    // ΝΕΟ: Map για παρακολούθηση (Τίτλος Εγγράφου -> Τελευταία έκδοση που είδε)
+    private Map<String, Integer> followedDocs = new HashMap<>();
+
     public User() {}
 
     public User(String username, String password, String fullName, String type) {
@@ -18,7 +27,7 @@ public class User implements Serializable {
         this.type = type;
     }
 
-    // Getters και Setters
+    // Getters & Setters
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 
@@ -31,8 +40,12 @@ public class User implements Serializable {
     public String getType() { return type; }
     public void setType(String type) { this.type = type; }
 
+    public List<String> getAllowedCategories() { return allowedCategories; }
+    public void setAllowedCategories(List<String> allowedCategories) { this.allowedCategories = allowedCategories; }
+
+    public Map<String, Integer> getFollowedDocs() { return followedDocs; }
+    public void setFollowedDocs(Map<String, Integer> followedDocs) { this.followedDocs = followedDocs; }
+
     @Override
-    public String toString() {
-        return fullName + " (" + type + ")";
-    }
+    public String toString() { return fullName + " (" + type + ")"; }
 }

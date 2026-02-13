@@ -18,6 +18,7 @@ public class UsersController {
     @FXML private PasswordField passwordField;
     @FXML private TextField fullnameField;
     @FXML private ComboBox<String> typeCombo; // Επιλογή τύπου χρήστη
+    @FXML private TextField categoriesField;
 
     @FXML
     public void initialize() {
@@ -41,6 +42,7 @@ public class UsersController {
         String pass = passwordField.getText();
         String name = fullnameField.getText();
         String type = typeCombo.getValue();
+        String catsText = categoriesField.getText(); // Π.χ. "Coffee"
 
         if (user.isEmpty() || pass.isEmpty() || name.isEmpty()) {
             showAlert("Σφάλμα", "Συμπληρώστε όλα τα πεδία!");
@@ -57,6 +59,14 @@ public class UsersController {
 
         // Δημιουργία και αποθήκευση
         User newUser = new User(user, pass, name, type);
+        // Αποθήκευση επιτρεπτών κατηγοριών
+        if (!catsText.isEmpty()) {
+            String[] cats = catsText.split(",");
+            for (String c : cats) {
+                newUser.getAllowedCategories().add(c.trim());
+            }
+        }
+
         DataManager.getUsers().add(newUser); // Προσθήκη στη μνήμη
         DataManager.saveAllData(); // Αποθήκευση στο αρχείο
 

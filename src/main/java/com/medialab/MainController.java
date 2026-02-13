@@ -1,5 +1,6 @@
 package com.medialab;
 
+import com.medialab.model.Document;
 import com.medialab.model.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -40,6 +41,28 @@ public class MainController {
 
         totalDocsLabel.setText("Συνολικά Έγγραφα: " + DataManager.getDocuments().size());
         totalCatsLabel.setText("Κατηγορίες: " + DataManager.getCategories().size());
+
+        // ΕΛΕΓΧΟΣ ΕΙΔΟΠΟΙΗΣΕΩΝ
+        StringBuilder updates = new StringBuilder();
+        for (Document doc : DataManager.getDocuments()) {
+            if (user.getFollowedDocs().containsKey(doc.getTitle())) {
+                int lastSeenVer = user.getFollowedDocs().get(doc.getTitle());
+                if (doc.getVersion() > lastSeenVer) {
+                    updates.append("- ").append(doc.getTitle()).append(" (νέα έκδοση ").append(doc.getVersion()).append(")\n");
+                    // Ενημέρωση της έκδοσης που είδε
+                    user.getFollowedDocs().put(doc.getTitle(), doc.getVersion());
+                }
+            }
+        }
+
+        if (updates.length() > 0) {
+            DataManager.saveAllData(); // Σώσε ότι τα είδε
+            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+            alert.setTitle("Ενημερώσεις Εγγράφων");
+            alert.setHeaderText("Έγγραφα που παρακολουθείτε έχουν αλλάξει:");
+            alert.setContentText(updates.toString());
+            alert.show();
+        }
     }
 
     @FXML private StackPane contentArea;
@@ -74,8 +97,14 @@ public class MainController {
     public void onDocsMenuClick(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/documents_view.fxml"));
+            Node view = loader.load();
+
+            // ΠΕΡΑΣΜΑ ΧΡΗΣΤΗ ΣΤΟΝ CONTROLLER
+            DocumentsController controller = loader.getController();
+            controller.setLoggedInUser(currentUser);
+
             contentArea.getChildren().clear();
-            contentArea.getChildren().add(loader.load());
+            contentArea.getChildren().add(view);
         } catch (IOException e) {
             e.printStackTrace();
         }

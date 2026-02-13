@@ -14,6 +14,7 @@ public class EditorController {
     @FXML private ComboBox<Category> categoryCombo;
     @FXML private TextArea contentArea;
     @FXML private Label statusLabel;
+    @FXML private Button historyBtn;
 
     private User currentUser;
     private Document currentDocument; // Αν είναι null -> Νέο έγγραφο, αλλιώς -> Επεξεργασία
@@ -28,6 +29,14 @@ public class EditorController {
     public void setContext(User user, Document doc) {
         this.currentUser = user;
         this.currentDocument = doc;
+
+        // Έλεγχος για το Ιστορικό
+        if ("user".equals(user.getType())) {
+            if (historyBtn != null) historyBtn.setVisible(false); // Κρύψιμο κουμπιού
+            titleField.setEditable(false);
+            categoryCombo.setDisable(true);
+            contentArea.setEditable(false); // Read-only mode
+        }
 
         if (doc != null) {
             // Λειτουργία Επεξεργασίας: Φόρτωσε τα στοιχεία
