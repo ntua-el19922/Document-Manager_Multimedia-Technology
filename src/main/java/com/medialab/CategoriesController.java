@@ -23,7 +23,7 @@ public class CategoriesController {
         String name = nameField.getText();
         if (name.isEmpty()) return;
 
-        // Έλεγχος διπλότυπων
+        // έλεγχος διπλότυπων
         for (Category c : DataManager.getCategories()) {
             if (c.getName().equalsIgnoreCase(name)) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Η κατηγορία υπάρχει ήδη!");
@@ -48,7 +48,7 @@ public class CategoriesController {
         }
     }
 
-    // Προσοχή: Η επεξεργασία (rename) ζητείται στην εκφώνηση [cite: 36]
+    // η επεξεργασία (rename)
     @FXML
     public void onEdit() {
         Category selected = table.getSelectionModel().getSelectedItem();

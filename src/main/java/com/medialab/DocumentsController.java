@@ -18,11 +18,11 @@ public class DocumentsController {
     @FXML private TableColumn<Document, String> categoryCol;
     @FXML private TableColumn<Document, String> dateCol;
 
-    // ΝΕΑ ΚΟΥΜΠΙΑ ΚΑΙ ΠΕΔΙΑ ΑΝΑΖΗΤΗΣΗΣ
+    // κουμπιά και πεδία αναζήτησης
     @FXML private Button newDocBtn;
     @FXML private Button openDocBtn;
-    @FXML private Button watchBtn; // Κουμπί παρακολούθησης
-    @FXML private TextField searchField; // Πεδίο αναζήτησης
+    @FXML private Button watchBtn; // κουμπί παρακολούθησης
+    @FXML private TextField searchField; // πεδίο αναζήτησης
     @FXML private Button deleteDocBtn;
 
     private User currentUser;
@@ -35,14 +35,14 @@ public class DocumentsController {
     }
 
     private void setupPermissions() {
-        // Αν είναι απλός user, κρύψε το κουμπί "Νέο Έγγραφο" [cite: 19, 20]
+        // αν είναι απλός user, κρύψε το κουμπί "Νέο Έγγραφο"
         if ("user".equals(currentUser.getType())) {
             newDocBtn.setVisible(false);
-            deleteDocBtn.setVisible(false); // Κρύψιμο διαγραφής για απλό χρήστη
-            openDocBtn.setText("Προβολή"); // Αλλαγή κειμένου
+            deleteDocBtn.setVisible(false); // κρύψιμο διαγραφής για απλό χρήστη
+            openDocBtn.setText("Προβολή"); // αλλαγή κειμένου
         } else {
             newDocBtn.setVisible(true);
-            deleteDocBtn.setVisible(true); // Εμφάνιση για Admin & Author
+            deleteDocBtn.setVisible(true); // εμφάνιση για Admin & Author
             openDocBtn.setText("Άνοιγμα / Επεξεργασία");
         }
     }
@@ -54,7 +54,7 @@ public class DocumentsController {
         categoryCol.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
         dateCol.setCellValueFactory(new PropertyValueFactory<>("creationDate"));
 
-        // Listener για την αναζήτηση [cite: 17, 79]
+        // listener για την αναζήτηση
         if (searchField != null) {
             searchField.textProperty().addListener((observable, oldValue, newValue) -> filterList(newValue));
         }
@@ -63,14 +63,13 @@ public class DocumentsController {
     private void loadDocuments() {
         masterData.clear();
 
-        // Φιλτράρισμα βάσει δικαιωμάτων κατηγορίας [cite: 12]
+        //  φιλτράρισμα βάσει δικαιωμάτων κατηγορίας
         for (Document doc : DataManager.getDocuments()) {
-            // Ο admin και ο author βλέπουν τα πάντα ή πρέπει να ελέγχεται;
-            // Η εκφώνηση λέει ο Author βλέπει ό,τι του έχει ανατεθεί. Ο Admin όλα.
+            // ο admin βλέπει τα πάντα
             if ("admin".equals(currentUser.getType())) {
                 masterData.add(doc);
             } else {
-                // ΕΛΕΓΧΟΣ: Αγνοούμε κεφαλαία/πεζά (Case Insensitive)
+                // αγνοούμε κεφαλαία/πεζά (case insensitive)
                 boolean hasAccess = false;
                 for (String allowedCat : currentUser.getAllowedCategories()) {
                     if (allowedCat.trim().equalsIgnoreCase(doc.getCategoryName().trim())) {
@@ -92,7 +91,7 @@ public class DocumentsController {
             docsTable.setItems(masterData);
             return;
         }
-        // Αναζήτηση σε Τίτλο, Συγγραφέα ή Κατηγορία [cite: 17]
+        // αναζήτηση σε τίτλο, συγγραφέα ή κατηγορία [cite: 17]
         FilteredList<Document> filtered = new FilteredList<>(masterData, doc ->
                 doc.getTitle().toLowerCase().contains(text.toLowerCase()) ||
                         doc.getAuthorName().toLowerCase().contains(text.toLowerCase()) ||
@@ -117,7 +116,7 @@ public class DocumentsController {
         Document selected = docsTable.getSelectionModel().getSelectedItem();
         if (selected == null) return;
 
-        // Λογική Παρακολούθησης [cite: 15, 17, 81]
+        // παρακολούθηση εγγράφων
         if (currentUser.getFollowedDocs().containsKey(selected.getTitle())) {
             currentUser.getFollowedDocs().remove(selected.getTitle());
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Σταματήσατε να παρακολουθείτε το έγγραφο.");
@@ -127,7 +126,7 @@ public class DocumentsController {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Παρακολουθείτε το έγγραφο για αλλαγές.");
             alert.show();
         }
-        DataManager.saveAllData(); // Σώσε τις προτιμήσεις του χρήστη
+        DataManager.saveAllData(); // σώσε τις προτιμήσεις του χρήστη
     }
 
     @FXML
@@ -140,22 +139,22 @@ public class DocumentsController {
             return;
         }
 
-        // Επιβεβαίωση διαγραφής
+        // επιβεβαίωση διαγραφής
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Είστε σίγουρος ότι θέλετε να διαγράψετε το έγγραφο '" + selected.getTitle() + "';", ButtonType.YES, ButtonType.NO);
         confirm.setTitle("Επιβεβαίωση Διαγραφής");
         confirm.showAndWait();
 
         if (confirm.getResult() == ButtonType.YES) {
-            // 1. Διαγραφή από τη λίστα στη μνήμη (DataManager)
+            // διαγραφή από τη λίστα στη μνήμη (DataManager)
             DataManager.getDocuments().remove(selected);
 
-            // 2. Μόνιμη αποθήκευση στο JSON
+            // μόνιμη αποθήκευση στο JSON
             DataManager.saveAllData();
 
-            // 3. Ανανέωση του πίνακα στην οθόνη
+            // ανανέωση του πίνακα στην οθόνη
             loadDocuments();
 
-            // Ενημέρωση χρήστη
+            // ενημέρωση χρήστη
             Alert success = new Alert(Alert.AlertType.INFORMATION, "Το έγγραφο διαγράφηκε επιτυχώς.");
             success.show();
         }
@@ -168,13 +167,13 @@ public class DocumentsController {
 
             EditorController editorParams = loader.getController();
 
-            // ΔΙΟΡΘΩΣΗ BUG 1 & 2: Περνάμε τον ΣΩΣΤΟ χρήστη (currentUser) όχι τον admin
+            // περνάμε το όνομα του συγγραφέα
             editorParams.setContext(currentUser, doc);
 
             Stage stage = new Stage();
             stage.setTitle(doc == null ? "Νέο Έγγραφο" : "Επεξεργασία: " + doc.getTitle());
             stage.setScene(new javafx.scene.Scene(root));
-            stage.setOnHidden(e -> loadDocuments()); // Reload όταν κλείσει
+            stage.setOnHidden(e -> loadDocuments()); // reload όταν κλείσει
             stage.show();
 
         } catch (Exception e) { e.printStackTrace(); }

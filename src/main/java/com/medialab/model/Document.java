@@ -8,41 +8,41 @@ import java.util.List;
 
 public class Document implements Serializable {
     private String title;
-    private String authorName;   // Κρατάμε το username για ευκολία
-    private String categoryName; // Κρατάμε το όνομα κατηγορίας
-    private String content;      // Το τρέχον κείμενο
-    private String creationDate; // Ημερομηνία ως κείμενο
-    private int version;         // Αριθμός έκδοσης (π.χ. 1, 2, 3)
+    private String authorName;   //  username
+    private String categoryName;
+    private String content;
+    private String creationDate; // ημερομηνία ως κείμενο
+    private int version;         // αριθμός έκδοσης
 
-    // Λίστα για να κρατάμε τα παλιά κείμενα (Versioning)
+    // λίστα για τα παλιά κείμενα (versioning)
     private List<String> previousVersions = new ArrayList<>();
 
-    public Document() {} // Για το JSON
+    public Document() {} // για το JSON
 
     public Document(String title, String authorName, String categoryName, String content) {
         this.title = title;
         this.authorName = authorName;
         this.categoryName = categoryName;
         this.content = content;
-        this.version = 1; // Ξεκινάει από το 1 [cite: 24]
+        this.version = 1; // ξεκινάει από το 1
 
-        // Αυτόματη ημερομηνία τώρα
+        // αυτόματη ημερομηνία
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         this.creationDate = dtf.format(LocalDateTime.now());
     }
 
-    // Μέθοδος για ενημέρωση κειμένου (δημιουργεί νέα έκδοση)
+    // μέθοδος για ενημέρωση κειμένου (δημιουργεί νέα έκδοση)
     public void updateContent(String newContent) {
-        // 1. Κρατάμε το παλιό κείμενο στο ιστορικό
+        // κρατάμε το παλιό κείμενο στο ιστορικό
         previousVersions.add(this.content);
 
-        // 2. Ενημερώνουμε με το νέο
+        // ενημερώνουμε με το νέο
         this.content = newContent;
 
-        // 3. Αυξάνουμε την έκδοση
+        // αυξάνουμε την έκδοση
         this.version++;
 
-        // 4. ΕΝΗΜΕΡΩΣΗ ΗΜΕΡΟΜΗΝΙΑΣ
+        // ενημέρωση ημερομηνίας
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         this.creationDate = dtf.format(LocalDateTime.now());
     }

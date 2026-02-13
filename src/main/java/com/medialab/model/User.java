@@ -12,10 +12,10 @@ public class User implements Serializable {
     private String fullName;
     private String type; // "admin", "author", "user"
 
-    // ΝΕΟ: Λίστα με ονόματα κατηγοριών που έχει πρόσβαση
+    // λίστα με ονόματα κατηγοριών που έχει πρόσβαση
     private List<String> allowedCategories = new ArrayList<>();
 
-    // ΝΕΟ: Map για παρακολούθηση (Τίτλος Εγγράφου -> Τελευταία έκδοση που είδε)
+    // map για παρακολούθηση (τίτλος εγγράφου -> τελευταία έκδοση που είδε)
     private Map<String, Integer> followedDocs = new HashMap<>();
 
     public User() {}

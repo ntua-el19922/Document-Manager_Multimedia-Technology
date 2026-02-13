@@ -17,10 +17,10 @@ import java.io.IOException;
 public class MainController {
 
     @FXML
-    private Label userInfoLabel; // Άλλαξε όνομα στο FXML
+    private Label userInfoLabel; // άλλαξε όνομα στο FXML
 
     @FXML
-    private Menu adminMenu; // Το μενού διαχείρισης
+    private Menu adminMenu; // το μενού διαχείρισης
 
     private User currentUser;
 
@@ -31,10 +31,10 @@ public class MainController {
     public void setLoggedInUser(User user) {
         this.currentUser = user;
 
-        // Ενημέρωση πληροφοριών αριστερά
+        // ενημέρωση πληροφοριών αριστερά
         userInfoLabel.setText("Χρήστης:\n" + user.getUsername() + "\n(" + user.getType() + ")");
 
-        // Έλεγχος δικαιωμάτων: Αν ΔΕΝ είναι admin, κρύψε το μενού διαχείρισης [cite: 29]
+        // έλεγχος δικαιωμάτων: αν δεν είναι admin, κρύψε το μενού διαχείρισης
         if (!"admin".equals(user.getType())) {
             adminMenu.setVisible(false);
         }
@@ -42,21 +42,21 @@ public class MainController {
         totalDocsLabel.setText("Συνολικά Έγγραφα: " + DataManager.getDocuments().size());
         totalCatsLabel.setText("Κατηγορίες: " + DataManager.getCategories().size());
 
-        // ΕΛΕΓΧΟΣ ΕΙΔΟΠΟΙΗΣΕΩΝ
+        // έλεγχος ειδοποιήσεων
         StringBuilder updates = new StringBuilder();
         for (Document doc : DataManager.getDocuments()) {
             if (user.getFollowedDocs().containsKey(doc.getTitle())) {
                 int lastSeenVer = user.getFollowedDocs().get(doc.getTitle());
                 if (doc.getVersion() > lastSeenVer) {
                     updates.append("- ").append(doc.getTitle()).append(" (νέα έκδοση ").append(doc.getVersion()).append(")\n");
-                    // Ενημέρωση της έκδοσης που είδε
+                    // ενημέρωση της έκδοσης που είδε
                     user.getFollowedDocs().put(doc.getTitle(), doc.getVersion());
                 }
             }
         }
 
         if (updates.length() > 0) {
-            DataManager.saveAllData(); // Σώσε ότι τα είδε
+            DataManager.saveAllData(); // σώσε ότι τα είδε
             javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
             alert.setTitle("Ενημερώσεις Εγγράφων");
             alert.setHeaderText("Έγγραφα που παρακολουθείτε έχουν αλλάξει:");
@@ -73,7 +73,7 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/users_view.fxml"));
             Node view = loader.load();
 
-            // Καθαρίζουμε το κέντρο και βάζουμε το νέο view
+            // καθαρίζουμε το κέντρο και βάζουμε το νέο view
             contentArea.getChildren().clear();
             contentArea.getChildren().add(view);
 
@@ -99,7 +99,7 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/documents_view.fxml"));
             Node view = loader.load();
 
-            // ΠΕΡΑΣΜΑ ΧΡΗΣΤΗ ΣΤΟΝ CONTROLLER
+            // πέρασμα χρήστη στον controller
             DocumentsController controller = loader.getController();
             controller.setLoggedInUser(currentUser);
 
@@ -112,12 +112,11 @@ public class MainController {
 
     @FXML
     public void onLogoutClick(ActionEvent event) throws IOException {
-        // Η λογική αποσύνδεσης παραμένει ίδια
-        // (Προσοχή: εδώ το event έρχεται από MenuItem, ίσως χρειαστεί αλλαγή στον τρόπο εύρεσης του Stage)
+        // η λογική αποσύνδεσης παραμένει ίδια
 
-        // Ασφαλής τρόπος για να βρούμε το παράθυρο από MenuItem
+        // ασφαλής τρόπος για να βρούμε το παράθυρο από MenuItem
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
-        // Χρησιμοποιούμε το adminMenu (ή οποιοδήποτε Node της σκηνής) για να βρούμε το Stage
+        // χρησιμοποιούμε το adminMenu (ή οποιοδήποτε Node της σκηνής) για να βρούμε το Stage
         Stage stage = (Stage) userInfoLabel.getScene().getWindow();
         stage.setScene(new Scene(loader.load()));
         stage.setTitle("MediaLab Documents Login");

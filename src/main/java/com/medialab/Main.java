@@ -1,4 +1,4 @@
-package com.medialab; // Προσοχή στο package!
+package com.medialab;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -11,17 +11,17 @@ public class Main extends Application {
 
     @Override
     public void init() throws Exception {
-        // Φόρτωση δεδομένων ΠΡΙΝ ξεκινήσει το γραφικό περιβάλλον
-        System.out.println("🔄 Αρχικοποίηση εφαρμογής...");
+        // φόρτωση δεδομένων πριν ξεκινήσει το γραφικό περιβάλλον
+        System.out.println("Αρχικοποίηση εφαρμογής...");
         DataManager.loadAllData();
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-        // Φόρτωση του FXML αρχείου από τα resources
+        // φόρτωση του FXML αρχείου από τα resources
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/login.fxml"));
 
-        // Δημιουργία της σκηνής
+        // δημιουργία της σκηνής
         Scene scene = new Scene(fxmlLoader.load(), 400, 300);
 
         stage.setTitle("MediaLab Documents");
@@ -31,8 +31,8 @@ public class Main extends Application {
 
     @Override
     public void stop() throws Exception {
-        // Αποθήκευση κατά τον τερματισμό
-        System.out.println("🛑 Τερματισμός εφαρμογής...");
+        // αποθήκευση κατά τον τερματισμό
+        System.out.println("Τερματισμός εφαρμογής...");
         DataManager.saveAllData();
     }
 

@@ -17,9 +17,9 @@ public class HistoryController {
 
         java.util.List<String> formattedHistory = new java.util.ArrayList<>();
         int ver = 1;
-        // Προσθέτουμε τις παλιές εκδόσεις
+        // προσθέτουμε τις παλιές εκδόσεις
         for (String oldContent : doc.getPreviousVersions()) {
-            formattedHistory.add("Έκδοση " + ver + ":\n" + oldContent); // Το \n αλλάζει γραμμή
+            formattedHistory.add("Έκδοση " + ver + ":\n" + oldContent); // με αλλαγή γραμμής
             ver++;
         }
 

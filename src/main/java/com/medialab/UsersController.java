@@ -23,12 +23,12 @@ public class UsersController {
     @FXML private TextField fullnameField;
     @FXML private ComboBox<String> typeCombo;
 
-    // ΝΕΟ: Η λίστα με τις κατηγορίες αντί για TextField
+    // η λίστα με τις κατηγορίες αντί για TextField
     @FXML private ListView<String> catsListView;
 
     @FXML
     public void initialize() {
-        // Ρύθμιση Στηλών
+        // ρύθμιση Στηλών
         usernameCol.setCellValueFactory(new PropertyValueFactory<>("username"));
         fullnameCol.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -39,15 +39,15 @@ public class UsersController {
             return new javafx.beans.property.SimpleStringProperty(asString);
         });
 
-        // Ρύθμιση ComboBox
+        // ρύθμιση ComboBox
         typeCombo.setItems(FXCollections.observableArrayList("admin", "author", "user"));
         typeCombo.setValue("user");
 
-        // Ρύθμιση Λίστας Κατηγοριών (Πολλαπλή επιλογή)
+        // ρύθμιση λίστας κατηγοριών (πολλαπλή επιλογή)
         catsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         loadCategoriesToList();
 
-        // Listener: Όταν πατάς σε χρήστη στον πίνακα, γέμισε τη φόρμα
+        // listener: όταν πατάς σε χρήστη στον πίνακα, γέμισε τη φόρμα
         usersTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 fillForm(newSelection);
@@ -58,7 +58,7 @@ public class UsersController {
     }
 
     private void loadCategoriesToList() {
-        // Παίρνουμε τα ονόματα από όλες τις υπάρχουσες κατηγορίες
+        // παίρνουμε τα ονόματα από όλες τις υπάρχουσες κατηγορίες
         List<String> catNames = new ArrayList<>();
         for (Category c : DataManager.getCategories()) {
             catNames.add(c.getName());
@@ -72,7 +72,7 @@ public class UsersController {
         fullnameField.setText(user.getFullName());
         typeCombo.setValue(user.getType());
 
-        // Επιλογή κατηγοριών στη λίστα
+        // επιλογή κατηγοριών στη λίστα
         catsListView.getSelectionModel().clearSelection();
         for (String allowed : user.getAllowedCategories()) {
             catsListView.getSelectionModel().select(allowed);
@@ -91,7 +91,7 @@ public class UsersController {
             return;
         }
 
-        // Έλεγχος αν υπάρχει ήδη
+        // έλεγχος αν υπάρχει ήδη
         for (User u : DataManager.getUsers()) {
             if (u.getUsername().equals(user)) {
                 showAlert("Σφάλμα", "Το username υπάρχει ήδη!");
@@ -101,7 +101,7 @@ public class UsersController {
 
         User newUser = new User(user, pass, name, type);
 
-        // Αποθήκευση επιλεγμένων κατηγοριών από τη λίστα
+        // αποθήκευση επιλεγμένων κατηγοριών από τη λίστα
         List<String> selectedCats = catsListView.getSelectionModel().getSelectedItems();
         newUser.setAllowedCategories(new ArrayList<>(selectedCats));
 
@@ -119,13 +119,13 @@ public class UsersController {
             return;
         }
 
-        // Ενημέρωση στοιχείων
+        // ενημέρωση στοιχείων
         selected.setUsername(usernameField.getText());
         selected.setPassword(passwordField.getText());
         selected.setFullName(fullnameField.getText());
         selected.setType(typeCombo.getValue());
 
-        // Ενημέρωση κατηγοριών
+        // ενημέρωση κατηγοριών
         List<String> selectedCats = catsListView.getSelectionModel().getSelectedItems();
         selected.setAllowedCategories(new ArrayList<>(selectedCats));
 
@@ -161,7 +161,7 @@ public class UsersController {
     }
 
     private void refreshTable() {
-        // Ξαναφορτώνουμε τις κατηγορίες μήπως προστέθηκαν καινούργιες
+        // ξαναφορτώνουμε τις κατηγορίες μήπως προστέθηκαν καινούργιες
         loadCategoriesToList();
         ObservableList<User> data = FXCollections.observableArrayList(DataManager.getUsers());
         usersTable.setItems(data);

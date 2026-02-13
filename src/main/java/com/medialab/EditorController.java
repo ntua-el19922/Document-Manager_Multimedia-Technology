@@ -17,20 +17,20 @@ public class EditorController {
     @FXML private Button historyBtn;
 
     private User currentUser;
-    private Document currentDocument; // Αν είναι null -> Νέο έγγραφο, αλλιώς -> Επεξεργασία
+    private Document currentDocument; // αν είναι null -> νέο έγγραφο, αλλιώς -> επεξεργασία
 
     @FXML
     public void initialize() {
-        // Γέμισμα του Dropdown με τις κατηγορίες που φτιάξαμε
+        // γέμισμα του dropdown με τις κατηγορίες που φτιάξαμε
         categoryCombo.setItems(FXCollections.observableArrayList(DataManager.getCategories()));
     }
 
-    // Αυτή τη μέθοδο την καλούμε όταν ανοίγουμε το παράθυρο
+    // αυτή τη μέθοδο την καλούμε όταν ανοίγουμε το παράθυρο
     public void setContext(User user, Document doc) {
         this.currentUser = user;
         this.currentDocument = doc;
 
-        // Έλεγχος για το Ιστορικό
+        // έλεγχος για το ιστορικό
         if ("user".equals(user.getType())) {
             if (historyBtn != null) historyBtn.setVisible(false); // Κρύψιμο κουμπιού
             titleField.setEditable(false);
@@ -39,12 +39,12 @@ public class EditorController {
         }
 
         if (doc != null) {
-            // Λειτουργία Επεξεργασίας: Φόρτωσε τα στοιχεία
+            // λειτουργία επεξεργασίας: φόρτωσε τα στοιχεία
             titleField.setText(doc.getTitle());
-            titleField.setEditable(false); // Ο τίτλος δεν αλλάζει (ζητείται συχνά έτσι)
+            titleField.setEditable(false); // ο τίτλος δεν αλλάζει
             contentArea.setText(doc.getContent());
 
-            // Βρες και επέλεξε την σωστή κατηγορία στο ComboBox
+            // βρες και επέλεξε την σωστή κατηγορία στο ComboBox
             for (Category c : categoryCombo.getItems()) {
                 if (c.getName().equals(doc.getCategoryName())) {
                     categoryCombo.setValue(c);
@@ -53,7 +53,7 @@ public class EditorController {
             }
             statusLabel.setText("Επεξεργασία: " + doc.getTitle() + " (v" + doc.getVersion() + ")");
         } else {
-            // Λειτουργία Δημιουργίας
+            // λειτουργία δημιουργίας
             statusLabel.setText("Νέο Έγγραφο");
         }
     }
@@ -71,23 +71,23 @@ public class EditorController {
         }
 
         if (currentDocument == null) {
-            // --- ΔΗΜΙΟΥΡΓΙΑ ΝΕΟΥ ---
+            // δημιουργία νέου
             Document newDoc = new Document(title, currentUser.getUsername(), cat.getName(), content);
             DataManager.getDocuments().add(newDoc);
         } else {
-            // --- ΕΝΗΜΕΡΩΣΗ ΥΠΑΡΧΟΝΤΟΣ ---
-            // Ενημερώνουμε κατηγορία και περιεχόμενο (αυτό φτιάχνει και νέα έκδοση αυτόματα)
+            // ενημέρωση υπάρχοντος
+            // ενημερώνουμε κατηγορία και περιεχόμενο (αυτό φτιάχνει και νέα έκδοση αυτόματα)
             currentDocument.setCategoryName(cat.getName());
 
-            // Αν άλλαξε το κείμενο, κάνε update
+            // αν άλλαξε το κείμενο, κάνε update
             if (!currentDocument.getContent().equals(content)) {
                 currentDocument.updateContent(content);
             }
         }
 
-        DataManager.saveAllData(); // Αποθήκευση στο δίσκο
+        DataManager.saveAllData(); // αποθήκευση στο δίσκο
 
-        // Κλείσιμο παραθύρου
+        // κλείσιμο παραθύρου
         ((Stage) titleField.getScene().getWindow()).close();
     }
 

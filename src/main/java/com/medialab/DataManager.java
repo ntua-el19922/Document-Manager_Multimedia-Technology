@@ -19,7 +19,7 @@ import java.util.List;
  * σε αρχεία μορφής JSON.
  * </p>
  *
- * @author MediaLab Team
+ * @author viktorouli
  * @version 1.0
  */
 public class DataManager {
@@ -29,7 +29,7 @@ public class DataManager {
     private static final String CATEGORIES_FILE = "medialab/categories.json";
     private static final String DOCUMENTS_FILE = "medialab/documents.json";
 
-    // Στατικές λίστες που κρατούν τα δεδομένα στη μνήμη κατά την εκτέλεση
+    // στατικές λίστες που κρατούν τα δεδομένα στη μνήμη κατά την εκτέλεση
     private static List<User> users = new ArrayList<>();
     private static List<Category> categories = new ArrayList<>();
     private static List<Document> documents = new ArrayList<>();
@@ -51,7 +51,7 @@ public class DataManager {
                 if (created) System.out.println("Δημιουργήθηκε ο φάκελος αποθήκευσης.");
             }
 
-            // --- Φόρτωση Χρηστών ---
+            // φόρτωση χρηστών
             File userFile = new File(USERS_FILE);
             if (userFile.exists() && userFile.length() > 0) {
                 users = mapper.readValue(userFile, new TypeReference<List<User>>() {});
@@ -61,13 +61,13 @@ public class DataManager {
                 saveAllData();
             }
 
-            // --- Φόρτωση Κατηγοριών ---
+            // χόρτωση κατηγοριών
             File catFile = new File(CATEGORIES_FILE);
             if (catFile.exists() && catFile.length() > 0) {
                 categories = mapper.readValue(catFile, new TypeReference<List<Category>>() {});
             }
 
-            // --- Φόρτωση Εγγράφων ---
+            // φόρτωση Εγγράφων
             File docFile = new File(DOCUMENTS_FILE);
             if (docFile.exists() && docFile.length() > 0) {
                 documents = mapper.readValue(docFile, new TypeReference<List<Document>>() {});
