@@ -7,12 +7,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.util.List;
+
 public class UsersController {
 
     @FXML private TableView<User> usersTable;
     @FXML private TableColumn<User, String> usernameCol;
     @FXML private TableColumn<User, String> fullnameCol;
     @FXML private TableColumn<User, String> typeCol;
+    @FXML private TableColumn<User, String> catsCol;
 
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
@@ -26,6 +29,13 @@ public class UsersController {
         usernameCol.setCellValueFactory(new PropertyValueFactory<>("username"));
         fullnameCol.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+
+        // ΡΥΘΜΙΣΗ ΤΗΣ ΝΕΑΣ ΣΤΗΛΗΣ (Μετατρέπει τη λίστα σε κείμενο με κόμματα)
+        catsCol.setCellValueFactory(cellData -> {
+            List<String> list = cellData.getValue().getAllowedCategories();
+            String asString = (list == null || list.isEmpty()) ? "-" : String.join(", ", list);
+            return new javafx.beans.property.SimpleStringProperty(asString);
+        });
 
         // 2. Γέμισμα του ComboBox με επιλογές
         typeCombo.setItems(FXCollections.observableArrayList("admin", "author", "user"));

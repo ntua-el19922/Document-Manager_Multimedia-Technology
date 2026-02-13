@@ -23,6 +23,7 @@ public class DocumentsController {
     @FXML private Button openDocBtn;
     @FXML private Button watchBtn; // Κουμπί παρακολούθησης
     @FXML private TextField searchField; // Πεδίο αναζήτησης
+    @FXML private Button deleteDocBtn;
 
     private User currentUser;
     private ObservableList<Document> masterData = FXCollections.observableArrayList();
@@ -37,9 +38,11 @@ public class DocumentsController {
         // Αν είναι απλός user, κρύψε το κουμπί "Νέο Έγγραφο" [cite: 19, 20]
         if ("user".equals(currentUser.getType())) {
             newDocBtn.setVisible(false);
+            deleteDocBtn.setVisible(false); // Κρύψιμο διαγραφής για απλό χρήστη
             openDocBtn.setText("Προβολή"); // Αλλαγή κειμένου
         } else {
             newDocBtn.setVisible(true);
+            deleteDocBtn.setVisible(true); // Εμφάνιση για Admin & Author
             openDocBtn.setText("Άνοιγμα / Επεξεργασία");
         }
     }
@@ -67,8 +70,16 @@ public class DocumentsController {
             if ("admin".equals(currentUser.getType())) {
                 masterData.add(doc);
             } else {
-                // Έλεγχος αν η κατηγορία του εγγράφου είναι στις επιτρεπτές του χρήστη
-                if (currentUser.getAllowedCategories().contains(doc.getCategoryName())) {
+                // ΕΛΕΓΧΟΣ: Αγνοούμε κεφαλαία/πεζά (Case Insensitive)
+                boolean hasAccess = false;
+                for (String allowedCat : currentUser.getAllowedCategories()) {
+                    if (allowedCat.trim().equalsIgnoreCase(doc.getCategoryName().trim())) {
+                        hasAccess = true;
+                        break;
+                    }
+                }
+
+                if (hasAccess) {
                     masterData.add(doc);
                 }
             }
@@ -117,6 +128,37 @@ public class DocumentsController {
             alert.show();
         }
         DataManager.saveAllData(); // Σώσε τις προτιμήσεις του χρήστη
+    }
+
+    @FXML
+    public void onDeleteDocument() {
+        Document selected = docsTable.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Παρακαλώ επιλέξτε ένα έγγραφο προς διαγραφή.");
+            alert.show();
+            return;
+        }
+
+        // Επιβεβαίωση διαγραφής
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Είστε σίγουρος ότι θέλετε να διαγράψετε το έγγραφο '" + selected.getTitle() + "';", ButtonType.YES, ButtonType.NO);
+        confirm.setTitle("Επιβεβαίωση Διαγραφής");
+        confirm.showAndWait();
+
+        if (confirm.getResult() == ButtonType.YES) {
+            // 1. Διαγραφή από τη λίστα στη μνήμη (DataManager)
+            DataManager.getDocuments().remove(selected);
+
+            // 2. Μόνιμη αποθήκευση στο JSON
+            DataManager.saveAllData();
+
+            // 3. Ανανέωση του πίνακα στην οθόνη
+            loadDocuments();
+
+            // Ενημέρωση χρήστη
+            Alert success = new Alert(Alert.AlertType.INFORMATION, "Το έγγραφο διαγράφηκε επιτυχώς.");
+            success.show();
+        }
     }
 
     private void openEditor(Document doc) {

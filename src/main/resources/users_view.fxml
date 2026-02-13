@@ -23,6 +23,7 @@
                 <TableColumn fx:id="usernameCol" prefWidth="100.0" text="Username" />
                 <TableColumn fx:id="fullnameCol" prefWidth="150.0" text="Ονοματεπώνυμο" />
                 <TableColumn fx:id="typeCol" prefWidth="100.0" text="Τύπος" />
+                <TableColumn fx:id="catsCol" prefWidth="150.0" text="Πρόσβαση σε" />
             </columns>
         </TableView>
 

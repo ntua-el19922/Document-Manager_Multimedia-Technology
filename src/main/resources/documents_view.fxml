@@ -33,6 +33,7 @@
     <HBox spacing="15.0" alignment="CENTER_RIGHT">
         <Button fx:id="watchBtn" text="Follow/Unfollow" onAction="#onWatchToggle"/>
 
+        <Button fx:id="deleteDocBtn" onAction="#onDeleteDocument" style="-fx-background-color: #F44336; -fx-text-fill: white;" text="Διαγραφή" />
         <Button fx:id="newDocBtn" onAction="#onNewDocument" style="-fx-background-color: #2196F3; -fx-text-fill: white;" text="Νέο Έγγραφο" />
         <Button fx:id="openDocBtn" onAction="#onOpenDocument" text="Άνοιγμα / Επεξεργασία" />
     </HBox>
